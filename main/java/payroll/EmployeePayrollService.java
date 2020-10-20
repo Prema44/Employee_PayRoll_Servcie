@@ -54,6 +54,7 @@ public class EmployeePayrollService {
 		if (ioService.equals(IOService.FILE_IO)) {
 			entries = new EmployeeFileService().countEntries();
 		}
+		System.out.println("No of Entries in File: " + entries);
 		return entries;
 	}
 }
