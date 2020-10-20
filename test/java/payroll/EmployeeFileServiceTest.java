@@ -47,7 +47,20 @@ class EmployeeFileServiceTest {
 		empService.printData(EmployeePayrollService.IOService.FILE_IO);
 		long result = empService.countEntries(EmployeePayrollService.IOService.FILE_IO);
 		assertEquals(3, result);
-
+		}
+	
+	/**
+	 * Usecase7 for reading the data from file and add it to the data list
+	 */
+	@Test
+	public void given3Employee_WhenWrittenToFile_ShouldBeReadFromFile() {
+		Employee[] arrayOfEmps = { new Employee(1, "Jeff Bezos", 100000), new Employee(2, "Bill Gates", 200000),
+				new Employee(3, "Mark Zuckerberg", 300000) };
+		EmployeePayrollService empService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
+		empService.writeData(EmployeePayrollService.IOService.FILE_IO);
+		empService.readEmployeePayrollData(EmployeePayrollService.IOService.FILE_IO);
+		long result = empService.countEntries(EmployeePayrollService.IOService.FILE_IO);
+		assertEquals(3, result);
 	}
 	
 
