@@ -1,22 +1,38 @@
 package payroll;
 
-import java.util.*; 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 public class EmployeePayrollService {
-	private List<Employee> employeeList;
 	
-	public EmployeePayrollService() {
-		employeeList = new ArrayList<Employee>(); 
+	public enum IOService {
+		CONSOLE_IO, FILE_IO, DB_IO, REST_IO
+	};
+
+	private List<Employee> employeeList;
+
+	public EmployeePayrollService(List<Employee> list) {
+		this.employeeList = list;
 	}
+
 	public static void main(String[] args) {
-		EmployeePayrollService empService = new EmployeePayrollService();
+		ArrayList<Employee> list = new ArrayList<Employee>();
+		EmployeePayrollService empService = new EmployeePayrollService(list);
 		Scanner consoleInput = new Scanner(System.in);
 		empService.readEmployeePayrollData(consoleInput);
-		empService.writeData();
+		empService.writeData(IOService.CONSOLE_IO);
 	}
-	private void writeData() {
-		System.out.println("Writting data of employee to console: "+employeeList);
+
+	public void writeData(IOService ioService) {
+		if (ioService.equals(IOService.CONSOLE_IO))
+			System.out.println("Writting data of employee to console: " + employeeList);
+		else if (ioService.equals(IOService.FILE_IO)) {
+			new EmployeeFileService().writeData(employeeList);
+		}
 	}
-	private void readEmployeePayrollData(Scanner consoleInput) {
+
+	public void readEmployeePayrollData(Scanner consoleInput) {
 		System.out.println("Enter the employee id");
 		int id = consoleInput.nextInt();
 		consoleInput.nextLine();
@@ -24,6 +40,14 @@ public class EmployeePayrollService {
 		String name = consoleInput.nextLine();
 		System.out.println("Enter the employee salary");
 		double salary = consoleInput.nextDouble();
-		employeeList.add(new Employee(id,name,salary));
+		employeeList.add(new Employee(id, name, salary));
+	}
+
+	public long countEntries(IOService ioService) {
+		long entries = 0;
+		if (ioService.equals(IOService.FILE_IO)) {
+			entries = new EmployeeFileService().countEntries();
+		}
+		return entries;
 	}
 }
